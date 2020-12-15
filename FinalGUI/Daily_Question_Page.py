@@ -8,10 +8,26 @@ class Page3(Page):
 
    def __init__(self,*args, **kwargs):
        Page.__init__(self, *args, **kwargs)
-       self.label = tk.Label(self, text="Question of the Day!")
+       self.label = tk.Label(self, text="No trivia for today!\nHow are you though?")
        self.label.pack(side="top", expand=True)
 
-   def set_random_question(self):
-       pass
+       self.response_frame = tk.Frame(self)
+       self.response_frame.pack(side="top")
+
+       self.answer_button = tk.Button(self.response_frame, text="Good", command =lambda : self.good_button())
+       self.answer_button2 = tk.Button(self.response_frame, text="Not so good.", command = lambda : self.bad_button())
+       self.answer_button.pack(side="left")
+       self.answer_button2.pack(side="right")
+
+
+   def good_button(self):
+       self.answer_button.configure(bg = "#abfffb")
+       self.answer_button2.configure(bg="white")
+       self.label.configure(text="That is wonderful to hear\nYou can use the create post button on the \n upper left hand corner to tell others \n about your day!")
+   def bad_button(self):
+       self.answer_button.configure(bg="white")
+       self.answer_button2.configure(bg="#abfffb")
+       self.label.configure(text="We are sorry to hear that\n Hopefully our community can cheer you up!")
+
 
 

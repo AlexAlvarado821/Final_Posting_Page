@@ -11,6 +11,9 @@ from datetime import datetime
 from FinalGUI.Posting_Page import Page2
 from FinalGUI.Daily_Question_Page import Page3
 
+from FinalGUI import Error_Handling as exc
+
+
 
 
 class MainView(tk.Frame):
@@ -80,23 +83,23 @@ class MainView(tk.Frame):
         db.delete_blogger_table(self.conn)
         root.destroy()
 
-    def add_blogger(self):
+    def add_blogger(self, l_name, f_name):
         """
         This adds a new blogger if it passed the three tests below
         :return: None
         """
         try:
-            if self.has_Numbers(self.f_name.get().replace(" ", "")) or self.has_Numbers(self.l_name.get().replace(" ", "")):
+            if self.has_Numbers(f_name.replace(" ", "")) or self.has_Numbers(l_name.replace(" ", "")):
                 self.l_table_date.configure(text="Please enter a valid first or last name")
-                raise ValueError
-            elif self.has_spaces(self.f_name.get().replace(" ","")) or self.has_spaces(self.l_name.get().replace(" ","")):
+                raise exc.InvalidName
+            elif self.has_spaces(f_name.replace(" ","")) or self.has_spaces(l_name.replace(" ","")):
                 self.l_table_date.configure(text="Please enter a name rather than spaces")
-                raise ValueError
-            elif self.f_name.get() == "" or self.l_name.get() == "":
+                raise exc.NoName
+            elif f_name == "" or l_name == "":
                 self.l_table_date.configure(text="Error! No name or last name entered")
-                raise ValueError
+                raise exc.NoName
             else:
-                blogger = (self.f_name.get().replace(" ", ""), self.l_name.get().replace(" ",""), str(datetime.today()))
+                blogger = (f_name.replace(" ", ""), l_name.replace(" ",""), str(datetime.today()))
                 self.blogger_id = db.create_blogger(self.conn, blogger)
                 # register the addition
                 self.conn.commit()
@@ -109,9 +112,12 @@ class MainView(tk.Frame):
                 self.hide_create_blogger()
                 self.create_session()
 
-        except ValueError as err:
+        except exc.NoName as err:
             #change the test of the label to say the error so the user knows what to change
             print(err)
+        except exc.InvalidName as err:
+            print(err)
+
 
                #finish adding error handling in the code. I wanted to check if the input was a string and not a number
 
@@ -173,7 +179,7 @@ class MainView(tk.Frame):
         self.l_name.pack()
 
         # add a command to fetch the date from the entries for storage
-        self.b_add_blogger = tk.Button(self, text="Create Blogger", command=lambda: [self.add_blogger()],
+        self.b_add_blogger = tk.Button(self, text="Create Blogger", command=lambda: [self.add_blogger(self.f_name.get(), self.l_name.get())],
                                        bg='#abfffb')
         self.b_add_blogger.pack()
         # -------------

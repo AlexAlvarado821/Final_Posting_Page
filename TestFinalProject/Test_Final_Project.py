@@ -1,5 +1,10 @@
 import unittest
 from FinalGUI import bloggerdb as dbase
+from datetime import datetime
+from FinalGUI import Error_Handling as exc
+
+from FinalGUI.Main_page import MainView
+
 
 class MyTestCase(unittest.TestCase):
 
@@ -20,18 +25,19 @@ class MyTestCase(unittest.TestCase):
         assert self.post == "Who here can help me with raising children?"
         assert self.rows[self.post_id-1][2] == "Alvarado"
         assert self.rows[self.post_id-1][1] == "Alexander"
-    def test_add_post_with_incorrect_input(self):
-        pass
 
 
 
 
     def test_add_blogger(self):
-        self.create_blogger = ("Percy", "Jackson")
+        self.create_blogger = ("Percy", "Jackson", datetime.today())
         self.blogger_id = dbase.create_blogger(self.conn, self.create_blogger)
         self.rows = dbase.select_all_bloggers(self.conn)
         self.blogger = str(self.rows[self.blogger_id-1][1]) + " " + str(self.rows[self.blogger_id-1][2])
         assert self.blogger == "Percy Jackson"
+    def test_add_blogger_exceptions(self):
+        with self.assertRaises(exc.InvalidName):
+            create_blogger = ("1234", "Alvarado", datetime.today())
 
 
 
