@@ -1,8 +1,8 @@
 """
 Author: Alex Alvarado
-Date:
-Program:
-Description:
+Date: 11-29-20
+Program: bloggerdb.py
+Description: The database where the posts and the bloggers will be stored!
 """
 
 import sqlite3

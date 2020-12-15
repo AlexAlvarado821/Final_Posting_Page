@@ -1,3 +1,9 @@
+"""
+Author: Alex Alvarado
+Date: 12-14-20
+Program: Main_Page.py
+Description: This page creates the login page and imports and creates the other two pages so they can be accessed after a user is created
+"""
 import tkinter as tk
 from FinalGUI import bloggerdb as db
 from datetime import datetime
@@ -48,26 +54,13 @@ class MainView(tk.Frame):
         self.b2.pack(side="left")
         self.b3.pack(side="right")
 
-
-
-        #----Creating the two buttons on the top
-
-        #-----Trying to add the first page on the main frame start
-
-
-        # gui.configure(bg='blue')
-
-
-
-
-        self.blogger_id = 0
-        self.r_f_name = ''
-        self.r_l_name = ''
-
+        #-------Quit application button----------#
+        #All the tables are destroyed in order for there to be a new session next time the application is run
         self.b_quit_application = tk.Button(self, text="Quit/Close", command = lambda:[self.destroy_tables()])
         self.b_quit_application.pack(side = "bottom")
 
 
+        #-------Log out button so a new user can be created----------#
         self.b_logout = tk.Button(self, text="Logout", command = lambda : self.logout())
         self.b_logout.configure(state=tk.DISABLED)
         self.b_logout.pack(side="bottom")
@@ -87,14 +80,11 @@ class MainView(tk.Frame):
         db.delete_blogger_table(self.conn)
         root.destroy()
 
-
-    def get_con(self):
-        return self.conn
-
-    def get_blogger_id(self):
-        return self.blogger_id
-
     def add_blogger(self):
+        """
+        This adds a new blogger if it passed the three tests below
+        :return: None
+        """
         try:
             if self.has_Numbers(self.f_name.get().replace(" ", "")) or self.has_Numbers(self.l_name.get().replace(" ", "")):
                 self.l_table_date.configure(text="Please enter a valid first or last name")

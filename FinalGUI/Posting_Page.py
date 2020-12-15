@@ -1,3 +1,10 @@
+"""
+Author: Alex Alvarado
+Date: 12-13-20
+Program: Posting_Page.py
+Description: This is where the user can make posts and they will appear on the screen
+"""
+
 from FinalGUI import bloggerdb as db
 from FinalGUI.Page_Class import Page
 
@@ -101,7 +108,7 @@ class Page2(Page):
 
         rows = db.select_all_posts(self.conn)
 
-        self.range = 1
+
         for row in rows:
             text = "[Post by {}, {}]\n".format(f_name, l_name)
             for col in row:
@@ -114,8 +121,7 @@ class Page2(Page):
                 else:
                     text +="\n{}\n".format(col)
 
-
-            self.range += 1
+            #creates dislike and like buttons which will apprear with everypost!
             self.create_reactions(text)
 
 
@@ -165,8 +171,8 @@ class Page2(Page):
         self.display_posts.configure(text=text)
 
 
-        self.button_l_name = tk.Button(self.top, text="Like-0", bg='white', command = lambda:self.likes_color())
-        self.button_d_name = tk.Button(self.top, text="Dislike-0", bg="white", command = lambda:self.dislikes_color())
+        self.button_l_name = tk.Button(self.top, text="Like-0", bg='white', command = lambda:self.button_l_name.configure(bg = "#abfffb"))
+        self.button_d_name = tk.Button(self.top, text="Dislike-0", bg="white", command = lambda:self.button_d_name.configure(bg='#abfffb'))
 
 
 

@@ -1,5 +1,5 @@
 import unittest
-from FinalProject.FinalGUI import bloggerdb as dbase
+from FinalGUI import bloggerdb as dbase
 
 class MyTestCase(unittest.TestCase):
 
@@ -20,6 +20,10 @@ class MyTestCase(unittest.TestCase):
         assert self.post == "Who here can help me with raising children?"
         assert self.rows[self.post_id-1][2] == "Alvarado"
         assert self.rows[self.post_id-1][1] == "Alexander"
+    def test_add_post_with_incorrect_input(self):
+        pass
+
+
 
 
     def test_add_blogger(self):
@@ -28,6 +32,7 @@ class MyTestCase(unittest.TestCase):
         self.rows = dbase.select_all_bloggers(self.conn)
         self.blogger = str(self.rows[self.blogger_id-1][1]) + " " + str(self.rows[self.blogger_id-1][2])
         assert self.blogger == "Percy Jackson"
+
 
 
 
