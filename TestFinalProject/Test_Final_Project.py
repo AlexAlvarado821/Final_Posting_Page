@@ -2,11 +2,6 @@ import unittest
 from FinalGUI import bloggerdb as dbase
 from datetime import datetime
 from FinalGUI import Error_Handling as exc
-
-from FinalGUI.Main_page import MainView
-import FinalGUI
-from FinalGUI import Main_page
-
 from FinalGUI import Create_Blogger as cb
 
 class MyTestCase(unittest.TestCase):
