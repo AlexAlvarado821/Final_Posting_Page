@@ -8,7 +8,6 @@ Description: This is where the user can make posts and they will appear on the s
 from FinalGUI import bloggerdb as db
 from FinalGUI.Page_Class import Page
 from FinalGUI import Error_Handling as er
-
 from FinalGUI import Create_Blogger as cb
 
 import tkinter as tk

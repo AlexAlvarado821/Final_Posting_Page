@@ -14,9 +14,7 @@ def check_new_blogger(l_name, f_name):
         :return: exception if there is any
         """
 
-
         if has_Numbers(f_name.replace(" ", "")) or has_Numbers(l_name.replace(" ", "")):
-
             raise exc.InvalidName
         elif has_spaces(f_name.replace(" ", "")) or has_spaces(l_name.replace(" ", "")):
             raise exc.NoName
@@ -25,7 +23,6 @@ def check_new_blogger(l_name, f_name):
 
 def check_new_post(post):
     """
-
     :param post:
     :return:
     """
