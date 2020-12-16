@@ -4,7 +4,10 @@ from datetime import datetime
 from FinalGUI import Error_Handling as exc
 
 from FinalGUI.Main_page import MainView
+import FinalGUI
+from FinalGUI import Main_page
 
+from FinalGUI import Create_Blogger as cb
 
 class MyTestCase(unittest.TestCase):
 
@@ -28,18 +31,22 @@ class MyTestCase(unittest.TestCase):
 
 
 
-
     def test_add_blogger(self):
         self.create_blogger = ("Percy", "Jackson", datetime.today())
         self.blogger_id = dbase.create_blogger(self.conn, self.create_blogger)
         self.rows = dbase.select_all_bloggers(self.conn)
         self.blogger = str(self.rows[self.blogger_id-1][1]) + " " + str(self.rows[self.blogger_id-1][2])
         assert self.blogger == "Percy Jackson"
-    def test_add_blogger_exceptions(self):
+
+
+    def test_add_blogger_InvalidName(self):
         with self.assertRaises(exc.InvalidName):
-            create_blogger = ("1234", "Alvarado", datetime.today())
+            create_new_blogger = cb.check_new_blogger("1234", "Alvarado")
 
 
+    def test_add_blogger_NoName(self):
+        with self.assertRaises(exc.NoName):
+            create_new_blogger = cb.check_new_blogger("", "")
 
 
 if __name__ == '__main__':

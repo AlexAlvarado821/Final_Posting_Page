@@ -7,6 +7,9 @@ Description: This is where the user can make posts and they will appear on the s
 
 from FinalGUI import bloggerdb as db
 from FinalGUI.Page_Class import Page
+from FinalGUI import Error_Handling as er
+
+from FinalGUI import Create_Blogger as cb
 
 import tkinter as tk
 
@@ -16,21 +19,28 @@ import tkinter as tk
 class Page2(Page):
     def __init__(self, *args, **kwargs):
         Page.__init__(self, *args, **kwargs)
-        self.label = tk.Label(self, text="Sign Up for our weekly newsletter")
+
+        #----Label/header for the page which is changed in the main page----#
+        self.label = tk.Label(self, text="")
         self.label.pack(side="top")
 
+        self.error_label = tk.Label(self, text="")
+        self.error_label.pack(side="top")
 
+        #---Connection to the database
         self.conn = db.create_connection("bloggerdb.db")
         self.create_tables = db.create_tables("bloggerdb.db")
 
+        #----Entry and button for creating posts----#
         self.post = tk.Entry(self)
         self.post.pack(ipady=40, ipadx=80)
-        self.b_create_post = tk.Button(self, text="POST", command = lambda : self.create_post())
+        self.b_create_post = tk.Button(self, text="POST", command = lambda : self.create_post(self.post.get()))
         self.b_create_post.pack()
-
+        #----Shows the current users posts----#
         self.b_user_posts = tk.Button(self, text="My Posts", command = lambda :self.show_users_posts())
         self.b_user_posts.pack()
 
+        #----Creates an outer and inner frame for the posts to be held in and manipulated-----#
 
         self.main_post_block = tk.Frame(self)
         self.main_post_block.pack()
@@ -41,7 +51,7 @@ class Page2(Page):
 
 
 
-
+        #creates the blogger id which will be raised by the main page whenever a new user logs in to ensure they can create multiple posts
         self.blogger_id = 1
 
 
@@ -94,13 +104,8 @@ class Page2(Page):
         self.buffer_block.pack()
 
 
-        #gather the name of the current user attempting to make a post
+        #----shows all the posts created and the corresponding names---#
 
-        rows2 = db.select_all_bloggers(self.conn)
-
-        f_name = rows2[self.blogger_id - 1][1]
-
-        l_name = rows2[self.blogger_id - 1][2]
 
         rows = db.select_all_posts(self.conn)
 
@@ -128,31 +133,35 @@ class Page2(Page):
 
 
 
-    def create_post(self):
+    def create_post(self, post):
+        #attempts to create post
         try:
-                rows2 = db.select_all_bloggers(self.conn)
+            cb.check_new_post(post)
 
-
-
-                l_name = rows2[self.blogger_id - 1][1]
-
-                f_name = rows2[self.blogger_id - 1][2]
-
-                post = (l_name, f_name, self.post.get())
-
-                self.post_id = db.create_post(self.conn, post)
-
-                self.conn.commit()
-
-                self.post.delete(0, tk.END)
-
-                self.num = 0
-
-                self.view_posts()
-
-        except ValueError as err:
-            # change the test of the label to say the error so the user knows what to change
+        except er.InvalidPost as err:
+            self.error_label.configure(text="You must enter something to post!")
             print(err)
+        else:
+
+            rows2 = db.select_all_bloggers(self.conn)
+
+            l_name = rows2[self.blogger_id - 1][1]
+
+            f_name = rows2[self.blogger_id - 1][2]
+
+            post = (l_name, f_name, self.post.get())
+
+            self.post_id = db.create_post(self.conn, post)
+
+            self.conn.commit()
+
+            self.post.delete(0, tk.END)
+
+            self.num = 0
+
+            self.error_label.configure(text="")
+
+            self.view_posts()
 
     def create_reactions(self, text):
 
