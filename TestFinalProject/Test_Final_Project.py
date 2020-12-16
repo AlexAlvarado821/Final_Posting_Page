@@ -29,6 +29,10 @@ class MyTestCase(unittest.TestCase):
         assert self.rows[self.post_id-1][2] == "Alvarado"
         assert self.rows[self.post_id-1][1] == "Alexander"
 
+    def test_add_post_invalid(self):
+        with self.assertRaises(exc.InvalidPost):
+            create_new_post = cb.check_new_post("")
+
 
 
     def test_add_blogger(self):
@@ -47,6 +51,7 @@ class MyTestCase(unittest.TestCase):
     def test_add_blogger_NoName(self):
         with self.assertRaises(exc.NoName):
             create_new_blogger = cb.check_new_blogger("", "")
+
 
 
 if __name__ == '__main__':
